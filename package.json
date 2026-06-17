@@ -1,0 +1,28 @@
+{
+  "name": "@onecount/contracts",
+  "version": "0.1.0",
+  "description": "Pure, framework-free cross-app contracts for the OneCount family (entitlements, deep-link registry, receiving-context schema, id vocabulary). No React Native / Next / RevenueCat deps.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" }
+  },
+  "files": ["dist"],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "prepublishOnly": "npm run build"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/onecount/onecount-contracts.git"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0"
+  }
+}
