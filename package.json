@@ -1,11 +1,13 @@
 {
   "name": "@onecount/contracts",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Pure, framework-free cross-app contracts for the OneCount family (entitlements, deep-link registry, receiving-context schema, id vocabulary). No React Native / Next / RevenueCat deps.",
   "license": "UNLICENSED",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "sideEffects": false,
   "scripts": {
     "build": "tsc -p tsconfig.json",

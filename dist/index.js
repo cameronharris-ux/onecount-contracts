@@ -18,3 +18,4 @@ __exportStar(require("./entitlement"), exports);
 __exportStar(require("./deepLinkRegistry"), exports);
 __exportStar(require("./receivingContext"), exports);
 __exportStar(require("./ids"), exports);
+__exportStar(require("./catalog"), exports);
