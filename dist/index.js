@@ -19,3 +19,4 @@ __exportStar(require("./deepLinkRegistry"), exports);
 __exportStar(require("./receivingContext"), exports);
 __exportStar(require("./ids"), exports);
 __exportStar(require("./catalog"), exports);
+__exportStar(require("./familyLinkEvents"), exports);
