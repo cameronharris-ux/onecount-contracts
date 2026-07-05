@@ -22,22 +22,37 @@
 /** Bump when the kind vocabulary changes; lets consumers reason about drift. */
 export declare const FAMILY_ACTIVITY_TAXONOMY_VERSION: "onecount.family-activity/v1";
 /**
- * Canonical kinds, by owning app and status:
+ * Canonical kinds, by owning app and status. This is a ground-truth sweep
+ * (grep across all four app repos' producers + inbound consumers, 2026-07-06 —
+ * hospitality-os-2026-07 quick-win #4/#12) — every LIVE entry below has a
+ * verified producer and every consumer note has a verified call site.
  *
- *  - REAL, emitted by Shield (owner_app `shield`):
+ *  - LIVE, emitted by Shield (owner_app `shield`):
  *      incident.logged · check.failed · check.resolved ·
  *      corrective_action_draft_suggested · shield.wastage ·
- *      shield.proof_provided · training.lapsed
- *  - REAL, emitted by OneCount (owner_app `onecount`):
+ *      shield.excursion · shield.supplier_rejection · training.lapsed ·
+ *      shield.proof_provided (consumes ops.proof_required, replies keyed to it)
+ *  - LIVE, emitted by OneCount (owner_app `onecount`):
  *      goods_received (the receiving-context DB trigger fires this on
- *      shield_receiving_context INSERT) · count.session_requested (the
- *      cross-device "please count this venue" request, shipped 2026-07 —
- *      see one-count-app's `lib/countSessionRequest.ts`)
- *  - PLANNED (consumers can switch on them before producers are wired):
- *      shield.excursion · shield.supplier_rejection · catalog.allergen_changed ·
- *      recall.raised · recall.resolved · ops.proof_required
+ *      shield_receiving_context INSERT) · count.session_requested ·
+ *      waste.logged · stocktake.finalized · receiving.applied
+ *  - LIVE, emitted by Ops (owner_app `ops`):
+ *      receiving.captured · handover.recorded
+ *  - PLANNED (consumer already wired, producer not yet landed — verified no
+ *    producer call site exists anywhere in the four repos as of this sweep):
+ *      variance.flagged (Ops-side const `VARIANCE_FLAGGED_KIND` defined but
+ *      unused by a producer) · catalog.allergen_changed (OneCount owns
+ *      cloud_catalog_items, will be the producer) · recall.raised ·
+ *      recall.resolved (Trace owns recalls; Shield's recallInbound.ts already
+ *      consumes both) · ops.proof_required (Ops owns CCP proof asks; Shield's
+ *      proofObligationInbound.ts already consumes it)
+ *  - DEPRECATED: recall.initiated — Trace's `app/recall/new.tsx` emits this
+ *    today, but Shield's consumer (recallInbound.ts) switches on
+ *    `recall.raised` / `recall.resolved`, not this string. Replaced by
+ *    `recall.raised`; Trace's producer is a separate follow-up fix, not this
+ *    registry.
  */
-export declare const FAMILY_ACTIVITY_KINDS: readonly ["incident.logged", "check.failed", "check.resolved", "corrective_action_draft_suggested", "goods_received", "count.session_requested", "shield.excursion", "shield.supplier_rejection", "catalog.allergen_changed", "recall.raised", "recall.resolved", "shield.wastage", "ops.proof_required", "shield.proof_provided", "training.lapsed"];
+export declare const FAMILY_ACTIVITY_KINDS: readonly ["incident.logged", "check.failed", "check.resolved", "corrective_action_draft_suggested", "goods_received", "count.session_requested", "waste.logged", "stocktake.finalized", "receiving.applied", "receiving.captured", "handover.recorded", "shield.excursion", "shield.supplier_rejection", "variance.flagged", "catalog.allergen_changed", "recall.raised", "recall.resolved", "shield.wastage", "ops.proof_required", "shield.proof_provided", "training.lapsed", "recall.initiated"];
 export type FamilyActivityKind = (typeof FAMILY_ACTIVITY_KINDS)[number];
 /** The four apps that can own a family-activity row (`owner_app` column). */
 export type FamilyActivityOwnerApp = "onecount" | "ops" | "shield" | "trace";

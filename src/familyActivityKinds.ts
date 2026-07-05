@@ -24,48 +24,78 @@
 export const FAMILY_ACTIVITY_TAXONOMY_VERSION = "onecount.family-activity/v1" as const;
 
 /**
- * Canonical kinds, by owning app and status:
+ * Canonical kinds, by owning app and status. This is a ground-truth sweep
+ * (grep across all four app repos' producers + inbound consumers, 2026-07-06 —
+ * hospitality-os-2026-07 quick-win #4/#12) — every LIVE entry below has a
+ * verified producer and every consumer note has a verified call site.
  *
- *  - REAL, emitted by Shield (owner_app `shield`):
+ *  - LIVE, emitted by Shield (owner_app `shield`):
  *      incident.logged · check.failed · check.resolved ·
  *      corrective_action_draft_suggested · shield.wastage ·
- *      shield.proof_provided · training.lapsed
- *  - REAL, emitted by OneCount (owner_app `onecount`):
+ *      shield.excursion · shield.supplier_rejection · training.lapsed ·
+ *      shield.proof_provided (consumes ops.proof_required, replies keyed to it)
+ *  - LIVE, emitted by OneCount (owner_app `onecount`):
  *      goods_received (the receiving-context DB trigger fires this on
- *      shield_receiving_context INSERT) · count.session_requested (the
- *      cross-device "please count this venue" request, shipped 2026-07 —
- *      see one-count-app's `lib/countSessionRequest.ts`)
- *  - PLANNED (consumers can switch on them before producers are wired):
- *      shield.excursion · shield.supplier_rejection · catalog.allergen_changed ·
- *      recall.raised · recall.resolved · ops.proof_required
+ *      shield_receiving_context INSERT) · count.session_requested ·
+ *      waste.logged · stocktake.finalized · receiving.applied
+ *  - LIVE, emitted by Ops (owner_app `ops`):
+ *      receiving.captured · handover.recorded
+ *  - PLANNED (consumer already wired, producer not yet landed — verified no
+ *    producer call site exists anywhere in the four repos as of this sweep):
+ *      variance.flagged (Ops-side const `VARIANCE_FLAGGED_KIND` defined but
+ *      unused by a producer) · catalog.allergen_changed (OneCount owns
+ *      cloud_catalog_items, will be the producer) · recall.raised ·
+ *      recall.resolved (Trace owns recalls; Shield's recallInbound.ts already
+ *      consumes both) · ops.proof_required (Ops owns CCP proof asks; Shield's
+ *      proofObligationInbound.ts already consumes it)
+ *  - DEPRECATED: recall.initiated — Trace's `app/recall/new.tsx` emits this
+ *    today, but Shield's consumer (recallInbound.ts) switches on
+ *    `recall.raised` / `recall.resolved`, not this string. Replaced by
+ *    `recall.raised`; Trace's producer is a separate follow-up fix, not this
+ *    registry.
  */
 export const FAMILY_ACTIVITY_KINDS = [
   // Shield-emitted (live).
-  "incident.logged",
-  "check.failed",
-  "check.resolved",
-  "corrective_action_draft_suggested",
+  "incident.logged", // producer: Shield lib/domain/triggers.ts · consumer: family feed UI (all apps)
+  "check.failed", // producer: Shield lib/db/correctiveActions.ts · consumer: family feed UI (all apps)
+  "check.resolved", // producer: Shield lib/db/correctiveActions.ts · consumer: family feed UI (all apps)
+  "corrective_action_draft_suggested", // producer: Shield lib/domain/triggers.ts · consumer: family feed UI (all apps)
   // Inbound from OneCount receiving-context trigger (live, owner_app onecount).
-  "goods_received",
-  // OneCount-emitted (live) — cross-device count-session request.
-  "count.session_requested",
-  // Planned — Shield producers land in a later slice.
-  "shield.excursion",
-  "shield.supplier_rejection",
-  "catalog.allergen_changed",
-  // Planned — recall fan-out (consumers/producers in a later slice).
-  "recall.raised",
-  "recall.resolved",
+  "goods_received", // producer: OneCount (DB trigger on shield_receiving_context INSERT) · consumer: Shield/Trace receiving evidence
+  // OneCount-emitted (live).
+  "count.session_requested", // producer: OneCount lib/countSessionRequest.ts (app/(tabs)/scan.tsx) · consumer: sibling device requesting a count
+  "waste.logged", // producer: OneCount lib/wasteLogs.ts · consumer: Ops/Shield/Trace family feed (waste-cost visibility)
+  "stocktake.finalized", // producer: OneCount lib/useFinalizeSession.ts · consumer: Ops variance tasks, family feed
+  "receiving.applied", // producer: OneCount lib/invoiceApplyWorkflow.ts · consumer: Ops/Shield/Trace family feed
+  // Ops-emitted (live).
+  "receiving.captured", // producer: Ops components/receiving/ReceivingSheet.tsx · consumer: family feed UI (all apps)
+  "handover.recorded", // producer: Ops hooks/useHandover.ts · consumer: family feed UI (all apps)
+  // Shield-emitted (live).
+  "shield.excursion", // producer: Shield lib/domain/triggers.ts · consumer: recall compounding check, family feed
+  "shield.supplier_rejection", // producer: Shield lib/onecount/supplierRejectionEmit.ts · consumer: Shield supplierRiskInbound.ts (per-supplier risk)
+  // Planned — Ops producer not yet landed; OneCount const exists, unused by a producer.
+  "variance.flagged",
+  // Planned — OneCount owns cloud_catalog_items, will be the producer.
+  "catalog.allergen_changed", // consumer (live): Shield lib/onecount/allergenDriftInbound.ts
+  // Planned — Trace owns recalls; producer not yet landed (Trace still emits
+  // the deprecated `recall.initiated` — see note above).
+  "recall.raised", // consumer (live): Shield lib/onecount/recallInbound.ts
+  "recall.resolved", // consumer (live): Shield lib/onecount/recallInbound.ts
   // Shelf-life -> wastage-cost loop (Shield emits on a DISPOSED disposition).
-  "shield.wastage",
-  // Ops CCP -> Shield proof obligation. Shield CONSUMES the Ops requirement
-  // and EMITS the captured proof back, keyed to the Ops requirement.
-  "ops.proof_required",
-  "shield.proof_provided",
+  "shield.wastage", // producer: Shield lib/onecount/wastageEmit.ts · consumer: family feed UI (all apps)
+  // Planned — Ops owns CCP proof asks; producer not yet landed.
+  "ops.proof_required", // consumer (live): Shield lib/onecount/proofObligationInbound.ts
+  // Shield emits the captured proof back, keyed to the Ops requirement ref.
+  "shield.proof_provided", // producer: Shield lib/onecount/proofObligationInbound.ts · consumer: Ops (displays returned proof)
   // Training-currency signal. Shield EMITS when required training / FSS
   // currency lapses; siblings gate recipe/prep on it (recipe gate is
   // sibling-side).
-  "training.lapsed",
+  "training.lapsed", // producer: Shield lib/onecount/trainingLapsedEmit.ts · consumer: Ops recipe/prep gate
+  // DEPRECATED — replaced by `recall.raised`. Trace's app/recall/new.tsx still
+  // emits this string; kept here (not deleted) so the normaliser/type stay
+  // truthful about what is actually on the wire until Trace's producer fix
+  // lands. Do not build a new consumer against this kind.
+  "recall.initiated",
 ] as const;
 
 export type FamilyActivityKind = (typeof FAMILY_ACTIVITY_KINDS)[number];
