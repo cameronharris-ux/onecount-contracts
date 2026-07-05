@@ -38,21 +38,22 @@ export declare const FAMILY_ACTIVITY_TAXONOMY_VERSION: "onecount.family-activity
  *      waste.logged · stocktake.finalized · receiving.applied
  *  - LIVE, emitted by Ops (owner_app `ops`):
  *      receiving.captured · handover.recorded
- *  - PLANNED (consumer already wired, producer not yet landed — verified no
- *    producer call site exists anywhere in the four repos as of this sweep):
+ *  - LIVE as of 2026-07-06 (the hospitality-os quick-win pass connected the
+ *    dead pairs the same day this registry landed):
+ *      catalog.allergen_changed (producer: OneCount lib/catalog.ts) ·
+ *      recall.raised · recall.resolved (producer: Trace app/recall/new.tsx +
+ *      lib/db/workflows.ts closeRecall) · ops.proof_required (producer: Ops
+ *      lib/ops/proofObligations.ts) ·
+ *      ai.action.drafted · ai.action.applied · ai.action.dismissed
+ *      (producer: OneCount lib/actionAudit.ts — the draft_action audit log)
+ *  - PLANNED (consumer already wired, producer not yet landed):
  *      variance.flagged (Ops-side const `VARIANCE_FLAGGED_KIND` defined but
- *      unused by a producer) · catalog.allergen_changed (OneCount owns
- *      cloud_catalog_items, will be the producer) · recall.raised ·
- *      recall.resolved (Trace owns recalls; Shield's recallInbound.ts already
- *      consumes both) · ops.proof_required (Ops owns CCP proof asks; Shield's
- *      proofObligationInbound.ts already consumes it)
- *  - DEPRECATED: recall.initiated — Trace's `app/recall/new.tsx` emits this
- *    today, but Shield's consumer (recallInbound.ts) switches on
- *    `recall.raised` / `recall.resolved`, not this string. Replaced by
- *    `recall.raised`; Trace's producer is a separate follow-up fix, not this
- *    registry.
+ *      unused by a producer)
+ *  - RETIRED: recall.initiated — no live producer since 2026-07-06 (Trace
+ *    dab187b renamed to `recall.raised`). Kept in the list only so historical
+ *    rows keep validating. Do not build anything against this kind.
  */
-export declare const FAMILY_ACTIVITY_KINDS: readonly ["incident.logged", "check.failed", "check.resolved", "corrective_action_draft_suggested", "goods_received", "count.session_requested", "waste.logged", "stocktake.finalized", "receiving.applied", "receiving.captured", "handover.recorded", "shield.excursion", "shield.supplier_rejection", "variance.flagged", "catalog.allergen_changed", "recall.raised", "recall.resolved", "shield.wastage", "ops.proof_required", "shield.proof_provided", "training.lapsed", "recall.initiated"];
+export declare const FAMILY_ACTIVITY_KINDS: readonly ["incident.logged", "check.failed", "check.resolved", "corrective_action_draft_suggested", "goods_received", "count.session_requested", "waste.logged", "stocktake.finalized", "receiving.applied", "receiving.captured", "handover.recorded", "shield.excursion", "shield.supplier_rejection", "variance.flagged", "catalog.allergen_changed", "recall.raised", "recall.resolved", "shield.wastage", "ops.proof_required", "shield.proof_provided", "training.lapsed", "ai.action.drafted", "ai.action.applied", "ai.action.dismissed", "recall.initiated"];
 export type FamilyActivityKind = (typeof FAMILY_ACTIVITY_KINDS)[number];
 /** The four apps that can own a family-activity row (`owner_app` column). */
 export type FamilyActivityOwnerApp = "onecount" | "ops" | "shield" | "trace";
