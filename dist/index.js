@@ -20,3 +20,5 @@ __exportStar(require("./receivingContext"), exports);
 __exportStar(require("./ids"), exports);
 __exportStar(require("./catalog"), exports);
 __exportStar(require("./familyLinkEvents"), exports);
+__exportStar(require("./familyActivityKinds"), exports);
+__exportStar(require("./productIdentity"), exports);

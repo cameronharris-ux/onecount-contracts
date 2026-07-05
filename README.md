@@ -7,9 +7,19 @@ Expo app and the Next.js hub.
 
 ## Exports
 - **entitlement** — `PRO_ENTITLEMENT_ID`, `SUITE_ENTITLEMENT_ID`, `isProEntitlement` (rule: `suite ⊇ pro`)
-- **deepLinkRegistry** — `WEB_HUB_BASE`, `WEB_HUB_FALLBACKS`, `webFallbackForTarget` (deep-link → web-hub fallback)
+- **deepLinkRegistry** — `WEB_HUB_BASE`, `WEB_HUB_FALLBACKS`, `webFallbackForTarget` (deep-link → web-hub fallback); `TRACE_QR_SCHEME`, `parseTraceQr` (Trace's `onecounttrace://b|r|p/...` QR grammar, for siblings that need to recognise a Trace label)
 - **receivingContext** — `RECEIVING_CONTEXT_SCHEMA` (`onecount.receiving-context/v1`), forbidden-keys guard, `ReceivingContext` types, `isValidSourceRef`
 - **ids** — `ref()` / `parseRef()` for namespaced `app:entity:<id>` references; the `org_id`/`orgId` convention
+- **catalog** — canonical catalog ref + price-free projection
+- **familyLinkEvents** — shared launcher-funnel contract (`family_link_events` row)
+- **familyActivityKinds** — `FAMILY_ACTIVITY_KINDS` taxonomy for the shared `family_activity_events.kind` column, `FamilyActivityOwnerApp`, `FamilyActivitySeverity`, `isKnownFamilyActivityKind`, `normalizeFamilyActivityKind`
+- **productIdentity** — `PRODUCT_IDENTITY` map (name + identity accent hex per app), `productIdentityForOwnerApp`, `accentForOwnerApp`, `labelForOwnerApp` — identity dots/icon-fills only, ≤12% of surface, never chrome
+
+## Changelog
+- **0.4.0** — Promoted `familyActivityKinds` (from Shield's `lib/onecount/familyActivityKinds.ts`) and `productIdentity` (from the Shield/Trace `lib/onecount/familyProvenance.ts` `PRODUCT_COLOURS` copies) into the shared package; added `count.session_requested` to the activity taxonomy (new OneCount producer); added Trace's QR/deep-link grammar (`TRACE_QR_SCHEME`, `parseTraceQr`) to `deepLinkRegistry`; documented `onecountplaybook` as a legacy-redirect-only scheme (still emitted by 3 apps — not removed) and clarified the one-canonical-scheme-per-app list. See `MIGRATION-0.4.md`.
+- **0.3.0** — Shared launcher-funnel contract (`family_link_events` row).
+- **0.2.0** — Canonical catalog ref + price-free projection.
+- **0.1.0** — Initial publish-ready scaffold: `entitlement`, `deepLinkRegistry`, `receivingContext`, `ids`.
 
 ## Status
 This is the **end-state** of the shared-contracts plan (see each app repo's
