@@ -29,18 +29,20 @@ the **interim parity gate** (`scripts/check-shared-contracts.mjs` in the Playboo
 repo) keeps the per-app copies in sync — edit the contract there and re-sync, or
 adopt this package and delete the copies.
 
-## Publishing (GitHub Packages)
-Requires an `onecount` GitHub org (the `@onecount` npm scope maps to it). Publish
-is automated by `.github/workflows/publish.yml` on a `v*` tag, or manually:
+## Publishing (git dependency, no registry)
+There is no npm registry publish step. Versioning is a `v*` git tag on this repo
+plus the committed `dist/` (CJS build checked into the repo). To cut a release:
 
 ```
 npm install
-npm run build
-npm publish   # needs an .npmrc auth token with write:packages
+npm run build   # regenerates dist/
+git add dist && git commit -m "vX.Y.Z"
+git tag vX.Y.Z && git push && git push --tags
 ```
 
 ## Consuming (per app)
-1. Add `@onecount/contracts` to `dependencies`.
-2. Add `@onecount:registry=https://npm.pkg.github.com` to the app's `.npmrc` (+ a read token in CI/EAS).
-3. Expo apps: add `@onecount/contracts` to `transpilePackages` (metro/app config) if consuming source; not needed for the compiled `dist`. Next.js hub: add to `transpilePackages` in `next.config`.
-4. Replace the local `entitlementContract.ts` / `deepLinkRegistry.ts` copies with imports; delete the copies; drop them from the parity gate.
+1. Add `@onecount/contracts` to `dependencies` as a git dependency pointing at
+   this repo and tag, e.g. `"@onecount/contracts": "github:onecount/contracts#v0.5.2"`
+   (or a local `file:`/path dependency for same-machine development).
+2. Expo apps: add `@onecount/contracts` to `transpilePackages` (metro/app config) if consuming source; not needed for the compiled `dist`. Next.js hub: add to `transpilePackages` in `next.config`.
+3. Replace the local `entitlementContract.ts` / `deepLinkRegistry.ts` copies with imports; delete the copies; drop them from the parity gate.
