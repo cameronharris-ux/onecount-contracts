@@ -69,7 +69,7 @@ exports.FAMILY_ACTIVITY_KINDS = [
     // OneCount-emitted (live).
     "count.session_requested", // producer: OneCount lib/countSessionRequest.ts (app/(tabs)/scan.tsx) · consumer: sibling device requesting a count
     "waste.logged", // producer: OneCount lib/wasteLogs.ts · consumer: Ops/Shield/Trace family feed (waste-cost visibility)
-    "stocktake.finalized", // producer: OneCount lib/useFinalizeSession.ts · consumer: Ops variance tasks, family feed
+    "stocktake.finalized", // producer: OneCount lib/useFinalizeSession.ts · consumer: Ops variance tasks, family feed · drivers: payload.topVarianceDrivers
     "receiving.applied", // producer: OneCount lib/invoiceApplyWorkflow.ts · consumer: Ops/Shield/Trace family feed
     // Ops-emitted (live).
     "receiving.captured", // producer: Ops components/receiving/ReceivingSheet.tsx · consumer: family feed UI (all apps)

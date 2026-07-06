@@ -10,11 +10,7 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "prepublishOnly": "npm run build"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "build": "tsc -p tsconfig.json"
   },
   "repository": {
     "type": "git",
