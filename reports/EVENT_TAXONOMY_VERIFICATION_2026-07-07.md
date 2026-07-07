@@ -329,3 +329,19 @@ Override any repo path via `ONECOUNT_APP_PATH` / `ONECOUNT_OPS_PATH` /
 `ONECOUNT_SHIELD_PATH` / `ONECOUNT_TRACE_PATH` env vars; a repo not checked
 out is soft-skipped (`MISS`, printed, not a hard failure) rather than
 crashing the run.
+
+---
+
+## Addendum (same day): taxonomy re-graded to match these findings
+
+Following this report, `src/familyActivityKinds.ts` was re-graded to verified
+reality: a new **SIGNAL ONLY** status (producer live, no kind-specific
+consumer — generic-feed display only) now covers the 10 kinds this report
+failed for consumer overclaims; `training.lapsed` and
+`corrective_action_draft_suggested` were demoted to **PLANNED** with their
+defects documented inline; `check.resolved` is SIGNAL ONLY with its
+netting-only role stated. `scripts/verify-event-taxonomy.mjs` understands the
+new status and now exits **0** (24 PASS, 1 INFO — the INFO flags
+`training.lapsed`'s dead-code producer for promotion or deletion). The script
+is suitable as a CI gate from this commit forward: any future divergence
+between taxonomy claims and code reality fails the build.

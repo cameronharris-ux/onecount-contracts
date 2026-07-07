@@ -214,7 +214,7 @@ function loadCanonicalTaxonomy() {
     const flush = () => {
       if (!currentLabel) return;
       const text = currentBody.join(" ");
-      const label = /RETIRED/.test(currentLabel) ? "retired" : /PLANNED/.test(currentLabel) ? "planned" : null;
+      const label = /RETIRED/.test(currentLabel) ? "retired" : /PLANNED/.test(currentLabel) ? "planned" : /SIGNAL ONLY/.test(currentLabel) ? "signal-only" : null;
       if (label) {
         for (const k of kinds) {
           // List-start position ONLY: start-of-text, right after `·`, or
@@ -834,6 +834,18 @@ function main() {
         note = hasConsumer
           ? `No producer yet (expected); consumer pre-wired at ${consumerHits.map((c) => `${c.repo}:${c.file}:${c.line}`).join(", ")}`
           : "No producer, no consumer (expected for PLANNED)";
+      }
+    } else if (status === "signal-only") {
+      if (!hasProducer) {
+        verdict = "FAIL";
+        note = "Marked SIGNAL ONLY but no live producer found";
+        failures++;
+      } else if (hasConsumer) {
+        verdict = "INFO";
+        note = `Marked SIGNAL ONLY but a kind-specific consumer now exists: ${consumerHits.map((c) => `${c.repo}:${c.file}:${c.line}`).join(", ")} — promote to LIVE in taxonomy`;
+      } else {
+        verdict = "PASS";
+        note = "Producer live; no kind-specific consumer (as documented — generic feed display only)";
       }
     } else if (hasProducer && hasConsumer) {
       verdict = "PASS";
