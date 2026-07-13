@@ -29,6 +29,12 @@ test("does not match a longer publishFamilyActivity identifier", () => {
   assert.deepEqual(matchedTexts("publishFamilyActivityType({ kind: value });"), []);
 });
 
+test("does not match publishFamilyActivity inside a prefixed JavaScript identifier", () => {
+  const source = "$publishFamilyActivity({ kind: value });\n_publishFamilyActivity({ kind: value });";
+
+  assert.deepEqual(matchedTexts(source), []);
+});
+
 test("decodes percent-encoded spaces when resolving the repository root", () => {
   const moduleUrl = "file:///Users/cameronharris/Project/OneCount%20-%20Pulse/scripts/taxonomy-scanner.mjs";
 

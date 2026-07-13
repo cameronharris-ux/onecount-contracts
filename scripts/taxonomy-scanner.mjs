@@ -2,7 +2,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 export function findPublishCallAnchors(source) {
-  const publishCallRe = /\b(?:[A-Za-z_$][A-Za-z0-9_$]*\.)?publishFamilyActivity\s*(?:\?\.|!)?\s*\(/g;
+  const publishCallRe = /(?<![A-Za-z0-9_$])(?:[A-Za-z_$][A-Za-z0-9_$]*\.)?publishFamilyActivity\s*(?:\?\.|!)?\s*\(/g;
   return [...source.matchAll(publishCallRe)];
 }
 
