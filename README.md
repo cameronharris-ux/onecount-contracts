@@ -46,7 +46,7 @@ git tag vX.Y.Z && git push && git push --tags
 
 ## Consuming (per app)
 1. Add `@onecount/contracts` to `dependencies` as a git dependency pointing at
-   this repo and tag, e.g. `"@onecount/contracts": "github:onecount/contracts#v0.6.0"`
+   this repo and tag, e.g. `"@onecount/contracts": "github:cameronharris-ux/onecount-contracts#v0.6.0"`
    (or a local `file:`/path dependency for same-machine development).
 2. Expo apps: add `@onecount/contracts` to `transpilePackages` (metro/app config) if consuming source; not needed for the compiled `dist`. Next.js hub: add to `transpilePackages` in `next.config`.
 3. Replace the local `entitlementContract.ts` / `deepLinkRegistry.ts` copies with imports; delete the copies; drop them from the parity gate.

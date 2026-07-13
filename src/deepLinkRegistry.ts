@@ -6,8 +6,8 @@
  * App-specific link TARGETS (which sibling an app links to) stay in each app's
  * ecosystemLinks module — only this scheme→web map is shared.
  *
- * One canonical scheme per app (verified against each app's `app.config.js`
- * as of v0.4):
+ * One canonical scheme per app (verified for v0.6.0 on 2026-07-13 against
+ * each app's `app.config.js`):
  *   - onecountapp    — OneCount (inventory)
  *   - onecount       — Ops (Ops's own config declares `["lastcall","onecount"]`;
  *                       `onecount` is the canonical family-facing scheme)
