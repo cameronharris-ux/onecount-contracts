@@ -81,13 +81,14 @@
  * see the printed table's "generic feed only" annotation for kinds that would
  * otherwise show FAIL with zero reactor-level consumer.
  *
- * Dependency-free: Node stdlib only (fs, path). Exit code is non-zero on any
+ * Dependency-free: Node stdlib only (fs, path, url). Exit code is non-zero on any
  * mismatch.
  */
 import fs from "node:fs";
 import path from "node:path";
+import { findPublishCallAnchors, repoRootFromModuleUrl } from "./taxonomy-scanner.mjs";
 
-const REPO_ROOT = path.resolve(new URL(".", import.meta.url).pathname, "..");
+const REPO_ROOT = repoRootFromModuleUrl(import.meta.url);
 
 const REPOS = {
   onecount: {
@@ -512,13 +513,6 @@ function buildRepoBuilderKindTable(files, constTable) {
   return table;
 }
 
-// Matches `publishFamilyActivity(` optionally qualified by a receiver
-// (`deps.publishFamilyActivity(`) and/or optional-chained
-// (`deps.publishFamilyActivity?.(`) — OneCount's invoiceApplyWorkflow.ts
-// injects the emit function as `deps.publishFamilyActivity` for testability,
-// which a plain `indexOf("publishFamilyActivity(")` substring search misses
-// entirely because of the `?.` between the name and the paren.
-const PUBLISH_CALL_RE = /(?:[A-Za-z_$][A-Za-z0-9_$]*\.)?publishFamilyActivity\s*(?:\?\.)?\s*\(/g;
 const FETCH_CALL_RE = /(?:[A-Za-z_$][A-Za-z0-9_$]*\.)?fetchFamilyActivity\s*(?:\?\.)?\s*\(/g;
 
 function extractProducers(source, constTable, builderTable) {
@@ -535,9 +529,7 @@ function extractProducers(source, constTable, builderTable) {
     if (builderTable.has(vm[2])) localVarKind.set(vm[1], builderTable.get(vm[2]));
   }
 
-  PUBLISH_CALL_RE.lastIndex = 0;
-  let anchorMatch;
-  while ((anchorMatch = PUBLISH_CALL_RE.exec(source))) {
+  for (const anchorMatch of findPublishCallAnchors(source)) {
     const anchorIdx = anchorMatch.index;
     const afterAnchor = anchorIdx + anchorMatch[0].length;
     let i = afterAnchor;
