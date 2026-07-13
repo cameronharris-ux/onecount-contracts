@@ -7,7 +7,7 @@
  *   `shield:submission:<id>`, `onecount:invoice:<id>`.
  */
 
-export type FamilyApp = "onecount" | "ops" | "shield" | "trace" | "playbook";
+export type FamilyApp = "onecount" | "ops" | "shield" | "trace" | "pulse" | "playbook";
 
 /** Build a namespaced cross-entity reference, e.g. ref("onecount","invoice","123"). */
 export function ref(app: FamilyApp, entity: string, id: string): string {

@@ -28,6 +28,7 @@ exports.PRODUCT_IDENTITY = {
     ops: { slug: "ops", name: "OneCount Ops", accent: "#56A9FF" }, // cyan
     shield: { slug: "shield", name: "OneCount Shield", accent: "#FFB224" }, // amber
     trace: { slug: "trace", name: "OneCount Trace", accent: "#2DD4BF" }, // teal
+    pulse: { slug: "pulse", name: "OneCount Pulse", accent: "#A78BFA" },
 };
 /** Normalises a raw `owner_app` string, folding the legacy `playbook` alias to `ops`. */
 function normalizeOwnerApp(ownerApp) {

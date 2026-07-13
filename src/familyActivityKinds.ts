@@ -109,7 +109,7 @@ export const FAMILY_ACTIVITY_KINDS = [
 
 export type FamilyActivityKind = (typeof FAMILY_ACTIVITY_KINDS)[number];
 
-/** The four apps that can own a family-activity row (`owner_app` column). */
+/** The owner set authorized by the current shared activity taxonomy, not the complete family membership type. */
 export type FamilyActivityOwnerApp = "onecount" | "ops" | "shield" | "trace";
 
 /** Severity of a family-activity row; drives status-chip colour, never identity. */

@@ -13,7 +13,7 @@ export const FAMILY_LINK_EVENTS_TABLE = "family_link_events";
 
 export type FamilyLinkOutcome = "opened_app" | "web_fallback" | "not_installed";
 
-export type FamilyLinkSourceApp = "playbook" | "onecount" | "ops" | "shield" | "trace";
+export type FamilyLinkSourceApp = "playbook" | "onecount" | "ops" | "shield" | "trace" | "pulse";
 
 export interface FamilyLinkEventRow {
   org_id: string;

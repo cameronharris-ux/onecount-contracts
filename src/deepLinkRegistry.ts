@@ -13,6 +13,7 @@
  *                       `onecount` is the canonical family-facing scheme)
  *   - onecountshield — Shield
  *   - onecounttrace  — Trace
+ *   - onecountpulse  — Pulse
  *
  * `onecountops` is NOT a real app scheme — no app.config.js declares it as its
  * own `scheme`. It only ever appears in `LSApplicationQueriesSchemes` arrays
@@ -36,6 +37,7 @@ export const WEB_HUB_FALLBACKS: Record<string, string> = {
   onecountops: `${WEB_HUB_BASE}/dashboard/operations`,
   onecountshield: `${WEB_HUB_BASE}/dashboard/compliance`,
   onecounttrace: `${WEB_HUB_BASE}/dashboard/trace`,
+  onecountpulse: WEB_HUB_BASE,
   /** @deprecated legacy-redirect only — see header note. Still emitted by 3 apps. */
   onecountplaybook: `${WEB_HUB_BASE}/dashboard/operations`,
 };

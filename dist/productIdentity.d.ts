@@ -17,7 +17,7 @@
  * see each app's `dotColourForOwnerApp`-style helper) — that stays app-local
  * because "self" depends on which app is rendering.
  */
-export type OwnerApp = "onecount" | "ops" | "shield" | "trace";
+export type OwnerApp = "onecount" | "ops" | "shield" | "trace" | "pulse";
 /**
  * `playbook` is a legacy `owner_app` alias: Ops absorbed Playbook in the
  * 2026-06 consolidation, but historical rows and any lagging producer may

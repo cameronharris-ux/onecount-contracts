@@ -18,6 +18,7 @@ exports.parseTraceQr = parseTraceQr;
  *                       `onecount` is the canonical family-facing scheme)
  *   - onecountshield — Shield
  *   - onecounttrace  — Trace
+ *   - onecountpulse  — Pulse
  *
  * `onecountops` is NOT a real app scheme — no app.config.js declares it as its
  * own `scheme`. It only ever appears in `LSApplicationQueriesSchemes` arrays
@@ -40,6 +41,7 @@ exports.WEB_HUB_FALLBACKS = {
     onecountops: `${exports.WEB_HUB_BASE}/dashboard/operations`,
     onecountshield: `${exports.WEB_HUB_BASE}/dashboard/compliance`,
     onecounttrace: `${exports.WEB_HUB_BASE}/dashboard/trace`,
+    onecountpulse: exports.WEB_HUB_BASE,
     /** @deprecated legacy-redirect only — see header note. Still emitted by 3 apps. */
     onecountplaybook: `${exports.WEB_HUB_BASE}/dashboard/operations`,
 };

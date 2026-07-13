@@ -63,7 +63,7 @@ export declare const FAMILY_ACTIVITY_TAXONOMY_VERSION: "onecount.family-activity
  */
 export declare const FAMILY_ACTIVITY_KINDS: readonly ["incident.logged", "check.failed", "check.resolved", "corrective_action_draft_suggested", "goods_received", "count.session_requested", "waste.logged", "stocktake.finalized", "receiving.applied", "receiving.captured", "handover.recorded", "shield.excursion", "shield.supplier_rejection", "variance.flagged", "catalog.allergen_changed", "recall.raised", "recall.resolved", "shield.wastage", "ops.proof_required", "shield.proof_provided", "training.lapsed", "ai.action.drafted", "ai.action.applied", "ai.action.dismissed", "recall.initiated"];
 export type FamilyActivityKind = (typeof FAMILY_ACTIVITY_KINDS)[number];
-/** The four apps that can own a family-activity row (`owner_app` column). */
+/** The owner set authorized by the current shared activity taxonomy, not the complete family membership type. */
 export type FamilyActivityOwnerApp = "onecount" | "ops" | "shield" | "trace";
 /** Severity of a family-activity row; drives status-chip colour, never identity. */
 export type FamilyActivitySeverity = "info" | "warning" | "critical";

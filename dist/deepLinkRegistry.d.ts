@@ -13,6 +13,7 @@
  *                       `onecount` is the canonical family-facing scheme)
  *   - onecountshield — Shield
  *   - onecounttrace  — Trace
+ *   - onecountpulse  — Pulse
  *
  * `onecountops` is NOT a real app scheme — no app.config.js declares it as its
  * own `scheme`. It only ever appears in `LSApplicationQueriesSchemes` arrays

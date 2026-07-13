@@ -6,7 +6,7 @@
  *   e.g. `onecount:catalog:<id>`, `playbook:recipe:<id>`, `trace:batch:<id>`,
  *   `shield:submission:<id>`, `onecount:invoice:<id>`.
  */
-export type FamilyApp = "onecount" | "ops" | "shield" | "trace" | "playbook";
+export type FamilyApp = "onecount" | "ops" | "shield" | "trace" | "pulse" | "playbook";
 /** Build a namespaced cross-entity reference, e.g. ref("onecount","invoice","123"). */
 export declare function ref(app: FamilyApp, entity: string, id: string): string;
 /** Parse a namespaced reference back into its parts, or null if malformed. */

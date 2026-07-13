@@ -1,6 +1,6 @@
 {
   "name": "@onecount/contracts",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "Pure, framework-free cross-app contracts for the OneCount family (entitlements, deep-link registry, receiving-context schema, id vocabulary, family-activity kinds, product identity). No React Native / Next / RevenueCat deps.",
   "license": "UNLICENSED",
   "main": "./dist/index.js",
@@ -10,7 +10,8 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "build": "tsc -p tsconfig.json"
+    "build": "tsc -p tsconfig.json",
+    "test": "node scripts/smoke.mjs"
   },
   "repository": {
     "type": "git",
